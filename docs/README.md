@@ -3,8 +3,8 @@ layout: home
 permalink: index.html
 
 # Please update this with your repository name and title
-repository-name: eYY-XXX-project-template
-title:
+repository-name: e18-6sp-Machine-Learning-for-Weather-Forecasting
+title: Machine Learning for Weather Forecasting
 ---
 
 [comment]: # "This is the standard layout for the project, but you can clean this and use your own template"
