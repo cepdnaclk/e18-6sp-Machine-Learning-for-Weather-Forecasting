@@ -102,9 +102,6 @@ plt.show()
 
 
 # %%
-# Create the Dash app
-app = dash.Dash(__name__)
-server = app.server
 
 # Create the Dash app
 app = dash.Dash(__name__)
