@@ -1,14 +1,13 @@
 import { useState, useEffect } from 'react';
 import axios from "axios";
-import './App.css';
-import Button from "./button";
-import DropDown from "./dropDown";
-import ResultBox from './result';
-import NumberCircle from "./numberCircle";
-import Header from './header';
-import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import UploadIcon from "./upload-icon.png";
+import { Button } from "./components";
+import {ResultBox} from './components';
+import {NumberCircle} from "./components";
+import {Header} from './components';
+import ReactDatePicker from 'react-datepicker';
+import "./components/resources/background1.jpg";
+import './App.css';
 
 function App() {
   const [ data, setData ] = useState("");
@@ -17,6 +16,20 @@ function App() {
 
   const [ selectedDate, setSelectedDate ] = useState("");
   const [ selectedArea, setSelectedArea ] = useState("Puttalam");
+
+  const [ isModalOpen, setIsModalOpen ] = useState(false);
+  const [ value, setValue ] = useState(null);
+
+  const handlePredictClick = () => {
+    const predictedValue = "5632";
+    setValue(predictedValue);
+    setIsModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
+
 
   const Areas = [
     {label: "Puttalam", value: "Puttalam"},
@@ -57,7 +70,7 @@ function App() {
   };
 
  return (
-    <>
+    <div>
       <Header />
       <div className='section'>
         <div className="section-row">
@@ -73,6 +86,7 @@ function App() {
           dateFormatCalendar='MMMM'
           yearDropdownItemNumber={15}
           scrollableYearDropdown
+          className='custom-date-picker'
           />
         </div>
       </div>
@@ -89,18 +103,17 @@ function App() {
         </div>
       </div>
       <div className='section'>
-        <Button text="Predict" />
+        <div className='section-row'>
+          <NumberCircle number="3" />
+        <Button text="Predict" handleClickButton={handlePredictClick}/>
+        </div>
       </div>
-      <div className='result-box'>
-        <ResultBox value="500" img="" />
+      <div>
+        {isModalOpen && (
+          <ResultBox value="500" onClose={handleCloseModal} />
+        )}
       </div>
-
-      <div className=" mt-[5rem] mb-4 text-2xl">
-        <span className="text-transparent bg-clip-text bg-gradient-to-r to-violet-600 from-blue-900 font-black">
-          Precipitation is : {val}
-        </span>
-      </div>
-    </>
+    </div>
   );
 }
 export default App;

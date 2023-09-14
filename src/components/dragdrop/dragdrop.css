@@ -1,0 +1,19 @@
+/* CSS for FileUpload component */
+.file-upload {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 200px;
+  }
+  
+  .dropzone {
+    border: 2px dashed #ccc;
+    padding: 20px;
+    text-align: center;
+    cursor: pointer;
+  }
+  
+  .dropzone.active {
+    background-color: #f0f0f0;
+  }
+  
