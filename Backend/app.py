@@ -1,60 +1,75 @@
-import mlflow
-from flask import Flask, jsonify, request
+from flask import Flask, request
+from werkzeug.utils import secure_filename
 import pandas as pd
-from sklearn.linear_model import LinearRegression
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
-from sklearn.externals import joblib
 import sqlite3
+import mlflow
+import mlflow.sklearn
+from sklearn.ensemble import RandomForestRegressor
+
 
 app = Flask(__name__)
 
+# Database setup
+conn = sqlite3.connect('climate_data.db')
+c = conn.cursor()
+
+# MLflow setup
 mlflow.set_tracking_uri("sqlite:///mlruns.db")
-mlflow.set_experiment("flask_mlflow")
-
-with mlflow.start_run():
-    # Train a model
-    conn = sqlite3.connect('database.db')
-    df = pd.read_sql_query("SELECT * from data", conn)
-
-    X = df.drop('target', axis=1)
-    y = df['target']
-
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)
-
-    clf = LinearRegression()
-    clf.fit(X_train, y_train)
-
-    y_pred = clf.predict(X_test)
-    rmse = mean_squared_error(y_test, y_pred)
-
-    joblib.dump(clf, 'model.pkl')
-
-    # Log the model
-    mlflow.sklearn.log_model(clf, "model")
 
 
 @app.route('/upload', methods=['POST'])
-def upload():
-    file = request.files['file']
-    df = pd.read_excel(file)
-    conn = sqlite3.connect('database.db')
-    df.to_sql('table_name', conn, if_exists='replace', index=True)
-    return 'File uploaded successfully!'
+def upload_file():
+    if 'file' not in request.files or 'location' not in request.form:
+        return 'File or location not found in the request', 400
+
+    f = request.files['file']
+    location = request.form['location']
+
+    f.save(secure_filename(f.filename))
+
+    # # Load the data file into a pandas DataFrame
+    data = pd.read_csv(f.filename)
+
+    # # Store the data in the SQLite database
+    # data.to_sql(location, conn, if_exists='replace')
+
+    # # Train your model here using the data
+    model = RandomForestRegressor()
+    data = data.drop('date', axis=1)
+    model.fit(data.drop('puttalam', axis=1), data['puttalam'])
+
+    # # Log the model with MLflow
+    with mlflow.start_run(run_name=location):
+        mlflow.sklearn.log_model(model, "model")
+
+    return 'File uploaded, data stored and model trained successfully'
 
 
-@app.route('/predict', methods=['POST'])
+
+@app.route('/predict', methods=['GET'])
 def predict():
-    json_ = request.json
-    query_df = pd.DataFrame(json_)
-    query = pd.get_dummies(query_df)
+    if 'location' not in request.form:
+        return 'Location not found in the request', 400
+
+    location = request.form['location']              # get the location 
+
+    # Load the latest model for this location from MLflow
+    runs = mlflow.search_runs(filter_string=f"tags.mlflow.runName='{location}'")
+    if runs.empty:
+        return 'No model found for this location', 400
+
+    latest_run_id = runs.loc[runs['start_time'].idxmax()]['run_id']
+    model_uri = f"runs:/{latest_run_id}/model"
     
-    # Load the model
-    loaded_model = mlflow.sklearn.load_model("model")
+    model = mlflow.sklearn.load_model(model_uri)
 
-    prediction = loaded_model.predict(query)
+    # Load the data for this location from the SQLite database
+    data = pd.read_sql_query(f"SELECT * FROM {location}", conn)
 
-    return jsonify({'prediction': list(prediction)})
+    # Make predictions using the model
+    predictions = model.predict(data.drop('precipitation', axis=1))
+
+    return str(predictions)  # Convert numpy array to string
 
 if __name__ == '__main__':
-    app.run(port=8080,debug=True)
+    app.run(port=5000,debug=True)
