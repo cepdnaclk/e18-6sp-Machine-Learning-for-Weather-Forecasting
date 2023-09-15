@@ -48,8 +48,8 @@ def upload_file():
 
 @app.route('/predict', methods=['GET'])
 def predict():
-    if 'location' not in request.form:
-        return 'Location not found in the request', 400
+    if 'location' not in request.form or 'time' not in request.form:
+        return 'Location or time not found in the request', 400
 
     location = request.form['location']              # get the location 
 
@@ -62,6 +62,8 @@ def predict():
     model_uri = f"runs:/{latest_run_id}/model"
     
     model = mlflow.sklearn.load_model(model_uri)
+
+    # return "model loaded success"
 
     # Load the data for this location from the SQLite database
     data = pd.read_sql_query(f"SELECT * FROM {location}", conn)
