@@ -27,16 +27,29 @@ def upload_file():
 
     f.save(secure_filename(f.filename))
 
-    # # Load the data file into a pandas DataFrame
-    data = pd.read_csv(f.filename)
+    # Load the data file into a pandas DataFrame
+    weather = pd.read_csv(f.filename)
 
-    # # Store the data in the SQLite database
-    # data.to_sql(location, conn, if_exists='replace')
+    # Create a target column
+    weather['date'] = pd.to_datetime(weather['date'])  # Convert 'Date' column to DateTime format
+    weather.sort_values(by='date', inplace=True)
 
-    # # Train your model here using the data
-    model = RandomForestRegressor()
-    data = data.drop('date', axis=1)
-    model.fit(data.drop('puttalam', axis=1), data['puttalam'])
+    weather['target'] = weather['puttalam'].shift(-1)
+    weather.dropna(inplace=True)        # Drop the last row
+
+    weather4 = weather.copy()
+
+    X_train =  weather4[weather4['date'] < pd.to_datetime("1/1/2006")].drop(['date', 'target'], axis=1)
+    y_train = weather4[weather4['date'] < pd.to_datetime("1/1/2006")]['target']
+
+    selected_features = ['rsuscs', 'wap_850', 'tro3_500', 'sbl', 'puttalam', 'sfcWind', 'rtmt',
+        'va_500', 'tro3_850', 'rsds', 'rsutcs', 'rsdt', 'ta_850', 'rsus',
+        'hurs', 'rsdscs', 'clwvi', 'hfss', 'ua_500', 'va_850', 'ta_500', 'clt',
+        'zg_850', 'hfls', 'clivi', 'rlutcs', 'prc', 'zg_500', 'prw', 'evspsbl']
+
+    model = RandomForestRegressor(n_estimators=100, random_state=42)
+
+    model.fit(X_train[selected_features], y_train)
 
     # # Log the model with MLflow
     with mlflow.start_run(run_name=location):
