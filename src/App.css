@@ -69,8 +69,20 @@ font-style: normal;
 font-weight: 700;
 }
 
+.section-title-3 {
+  color: #FFF;
+text-align: center;
+font-family: Lato;
+font-size: 28px;
+font-style: normal;
+font-weight: 700;
+position: relative;
+bottom: 20px;
+}
+
+
 .upload-area{
-  height: 140px;
+  height: 80px;
   width: inherit;
   border-radius: 10px;
   align-self: center;
@@ -79,14 +91,18 @@ font-weight: 700;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  position: relative;
+  bottom: 15px;
 }
 
 .upload-file {
   display: flex;
+  position: relative;
+  top: 40px;
     align-items: center;
     justify-content: center;
     padding: 20px;
-    margin: 10px;
+    margin: 20px 10px;
     background: #0A2239;
     color: white;
     cursor: pointer;
@@ -115,6 +131,8 @@ font-weight: 700;
   color:#0F3457;
   display: flex;
   justify-content: center;
+  position: relative;
+  top: 10px;
 }
 
 .data-section {
@@ -131,6 +149,33 @@ font-weight: 700;
 .section-small-title {
   color: #0A2239;
   font-family: Lato;
-
 }
 
+.section-sub-title {
+  color: white;
+  font-family: Lato;
+  font-size: 15px;
+  margin: 0;
+  position: relative;
+  bottom: 28px;
+  text-align: center;
+}
+
+.section-mini-title{
+  color: white;
+  font-family: Lato;
+  font-size: 10px;
+  margin: 10px;
+  
+}
+
+.card3 {
+  display: flex;
+  flex-direction: column;
+  width: 30%;
+  height:325px;
+  background-color: #0F3457;
+  margin: 10px;
+  padding: 5px;
+  border-radius: 20px;
+}

@@ -1,34 +1,25 @@
 import { useState, useEffect } from 'react';
 import axios from "axios";
 import { Button } from "./components";
-import {ResultBox} from './components';
-import {NumberCircle} from "./components";
-import {Header} from './components';
-import {DropDown} from "./components";
+import { ResultBox } from './components';
+import { NumberCircle } from "./components";
+import { Header } from './components';
+import { DropDown } from "./components";
 import ReactDatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import './App.css';
 
 function App() {
   const [ data, setData ] = useState("");
-  const [ val, setVal ] = useState("Upload data file if needed");
+  const [ value, setValue ] = useState("Upload data file if needed");
   const [ fileName, setFileName ] = useState("No file uploaded");
+  const [ file, setFile ] = useState(null);
 
   const [ selectedDate, setSelectedDate ] = useState("");
   const [ selectedArea, setSelectedArea ] = useState("Puttalam");
-
   const [ isModalOpen, setIsModalOpen ] = useState(false);
-  const [ value, setValue ] = useState(null);
 
-  const handlePredictClick = () => {
-    const predictedValue = "5632";
-    setValue(predictedValue);
-    setIsModalOpen(true);
-  }
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  }
   const Areas = [
     {label: "Puttalam", value: "Puttalam"},
     {label: "Colombo", value: "Colombo"},
@@ -43,7 +34,7 @@ function App() {
   ];
 
   useEffect(() => {
-    fetch("http://localhost:5000")
+    fetch("https://precipitation-prediction.azurewebsites.net/")
     .then((res) => res.json())
     .then((data) => {
       console.log(data);
@@ -51,17 +42,24 @@ function App() {
     });
   }, []);
 
-  const [ file, setFile ] = useState(null);
+  const handlePredictClick = () => {
+    setIsModalOpen(true);
+  }
 
-  const handleSubmit = async (event) => {
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+  }
+
+  const handleSubmitFileAndLocation = async (event) => {
     event.preventDefault();
-    const formData = new formData();
+    const formData = new FormData();
     formData.append("file", file);
+    formData.append("location", selectedArea);
 
     try {
-      axios.post("http://localhost:5000/upload", formData).then((res) =>{
+      axios.post("https://precipitation-prediction.azurewebsites.net/upload", formData).then((res) =>{
         console.log(res.data.message);
-        setVal(res.data.message);
+        setValue(res.data.message);
       });
       alert("File uploaded sucessfully");
     } catch(error){
@@ -69,10 +67,29 @@ function App() {
     }
   };
 
+  const handleSubmitDateAndLocation = async (event) => {
+    event.preventDefault();
+    const formData1 = new FormData();
+    formData1.append("time", selectedDate);
+    formData1.append("location", selectedArea);
+
+    try {
+      axios.get("https://precipitation-prediction.azurewebsites.net/predict", formData1).then((res) =>{
+        console.log(res.data.message);
+        setValue(res.data.message);
+      });
+      // alert("Data sent sucessfully");
+    } catch(error){
+      console.error(error);
+    }
+    setIsModalOpen(true);
+  }
+
+  //works fine - file upload part
   const handleFileUpload = (event) => {
     const file = event.target.files[0];
     setFileName(file.name);
-  };
+  }
 
  return (
     <div>
@@ -107,23 +124,28 @@ function App() {
           </div>
           <div className='card'>
           <NumberCircle number="3" />
-            <h2 className='section-title'>Upload Data File</h2>
-            <form onSubmit={handleSubmit}>
+            <h2 className='section-title-3'>Upload Data File</h2>
+            <h3 className="section-sub-title">If you want predict precipitation of other areas in Sri Lanka, upload a data file.</h3>
+            <form onSubmit={handleSubmitFileAndLocation}>
               <div className='upload-area'>
                 <input type="file"  name="file"  className="upload-file" onChange={(e) => {setFile(e.target.files[0]); handleFileUpload(e) }}/>
                 <p className='upload-instruction'>Click to browse, or drag and drop a file</p>
+                <button type='submit'>Upload</button>
               </div>
             </form>
           </div>
         </div>
       <div className='section'>
         <div className='section-row'>
-        <Button text="Predict" handleClickButton={handlePredictClick}/>
+          {/* <form onSubmit={handleSubmitDateAndLocation}> */}
+          {/* <button>hi</button> */}
+        <Button text="Predict" handleClickButton={handleSubmitDateAndLocation}/>
+        {/* </form> */}
         </div>
       </div>
       <div>
         {isModalOpen && (
-          <ResultBox value="500" onClose={handleCloseModal} />
+          <ResultBox value={value} onClose={handleCloseModal} />
         )}
       </div>
     </div>

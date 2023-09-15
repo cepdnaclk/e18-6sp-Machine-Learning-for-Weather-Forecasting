@@ -1,4 +1,5 @@
 from flask import Flask, request
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import pandas as pd
 import sqlite3
@@ -8,6 +9,8 @@ from sklearn.ensemble import RandomForestRegressor
 
 
 app = Flask(__name__)
+# CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
+cors = CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Database setup
 conn = sqlite3.connect('climate_data.db')
@@ -75,3 +78,5 @@ def predict():
 
 if __name__ == '__main__':
     app.run(port=5000,debug=True)
+
+
