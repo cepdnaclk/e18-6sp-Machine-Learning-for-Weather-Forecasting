@@ -1,13 +1,13 @@
 
-
 .result-box{
-    background-color: #FCDEBE;
+    background-color: #ECB0E1;
     width: 700px;
-    height: 350px;
+    height: 400px;
     position: fixed;
     top: 25%;
     left: 25%;
     z-index: 100;
+    border-radius: 20px;
 }
 
 .close-icon {
@@ -15,36 +15,34 @@
     top: 0px;
     right: 0px;
     cursor: pointer;
-    height: 30px;
+    height: 40px;
     margin: 2px;
 }
 
 .result-content {
     display: flex;
     flex-direction: column;
-    margin: 5px;
     align-items: center;
     justify-content: center;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
 .result-title {
-    color: #0A2239;
+    color: #0F3457;
     text-align: center;
-    font-family: Inter;
-    font-size: 35px;
+    font-family: Lato;
+    font-size: 30px;
     font-weight: 500;
 }
 
 .prec-icon {
-    height: 110px;
+    height: 100px;
 }
 
 .result-value {
-    color: #0CF;
+    color: #0F3457;
 text-align: center;
-font-family: Inter;
-font-size: 45px;
+font-family: Lato;
+font-size: 40px;
 font-weight: 700;
 
 }

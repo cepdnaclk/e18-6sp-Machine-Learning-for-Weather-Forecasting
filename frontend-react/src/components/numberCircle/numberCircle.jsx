@@ -4,7 +4,7 @@ import "./numberCircle.css";
 const NumberCircle = ({ number }) => {
 
     return (
-        <div className="number-circle">
+        <div>
             <span className="number">{number}</span>
         </div>
     );
