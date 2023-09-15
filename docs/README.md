@@ -57,13 +57,13 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 ## Solution Architecture
 
-![Solution](./images/6sp3.jpg)
+![Solution](./images/6sp3.png)
 
 ## Data Flow
 The prediction of Puttalam district will happen from the already uploaded dataset.
 If the user wants any other district's prediction and if he have the dataset with him he can upload the data set via our system and the model will get the prediction via our trained ML model. 
 
-![Data](./images/6sp4.jpg)
+![Data](./images/6sp4.png)
 
 ## Work Flow
 - Get a clear understanding of problem and problem domain
