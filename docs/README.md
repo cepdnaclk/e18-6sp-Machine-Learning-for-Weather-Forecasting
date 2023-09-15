@@ -15,13 +15,13 @@ title: Machine Learning for Weather Forecasting
 
 This is a sample image, to show how to add images to your page. To learn more options, please refer [this](https://projects.ce.pdn.ac.lk/docs/faq/how-to-add-an-image/) -->
 
-![Sample Image](./images/sample.png)
+<!-- ![Sample Image](./images/sample.png) -->
 
 
 ## Team
--  E/18/242, Nimnadi J. A. S., [email](e18242@eng.pdn.ac.lk)
--  E/18/368, Uduwanage H. U., [email](e18368@eng.pdn.ac.lk)
--  E/18/398, Wijerathne R. M. N. S., [email](e18398@eng.pdn.ac.lk)
+-  E/18/242, Nimnadi J. A. S., [e18242@eng.pdn.ac.lk](e18242@eng.pdn.ac.lk)
+-  E/18/368, Uduwanage H. U., [e18368@eng.pdn.ac.lk](e18368@eng.pdn.ac.lk)
+-  E/18/398, Wijerathne R. M. N. S., [e18398@eng.pdn.ac.lk](e18398@eng.pdn.ac.lk)
 
 ## Table of Contents
 1. [Introduction](#introduction)
@@ -32,11 +32,20 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 ## Introduction
 
- Machine learning for climate forecasting addresses the pressing real-world problem of accurately predicting and understanding climate patterns. Climate change has severe consequences on ecosystems, agriculture, and human lives. By harnessing the power of machine learning algorithms, this project aims to enhance climate models, enabling more precise and reliable forecasts. The impact is significant as it assists policymakers, researchers, and communities in making informed decisions related to disaster management, agriculture, energy, and urban planning. Improved climate forecasting can aid in mitigating the effects of climate change, minimizing risks, and promoting sustainable development, ultimately fostering a resilient and adaptive society.
+ Machine learning for climate forecasting addresses the pressing real-world problem of accurately predicting and understanding climate patterns. Climate change has severe consequences on ecosystems, agriculture, and human lives. By harnessing the power of machine learning algorithms, this project aims to enhance climate models, enabling more precise and reliable forecasts. The impact is significant as it assists policymakers, researchers, and communities in making informed decisions related to disaster management, agriculture, energy, and urban planning. Improved climate forecasting can aid in mitigating the effects of climate change, minimizing risks, and promoting sustainable development, ultimately fostering a resilient and adaptive society. For this project we are mainly focused on precipitation forecasting.  
 
-## Other Sub Topics
+## Features
 
-.....
+1. Select Date: Users can enter any date and easily get the prediction.
+2. Select Region: User can select any wanted district to get predictions.
+    For now we got the dataset relevent to Puttalam District. Otherwise if the user have relevent datasets he can upload it and get the results easily.
+3. Easy Prediction 
+
+![Dashboard](./images/6sp2.jpg)
+
+![Predictions](./images/6sp1.jpg)
+
+## Solution Architecture
 
 ## Links
 
