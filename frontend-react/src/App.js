@@ -78,10 +78,8 @@ function App() {
       }
     } catch (error){
       setErrorMessageP("");
-      console.error(error);
       setErrorMessageU(error.response ? error.message : "An error occured while uploading.");
       setIsErrorModalOpen(true);
-      console.log("error", error);
     }
   };
 
@@ -107,7 +105,6 @@ function App() {
       const response2 = await axios.get(predictLink, {params: params});
 
       if (response2.status === 200){
-        console.log(response2.data);
         setValue(response2.data);
         setIsModalOpen(true);
       } else {
