@@ -15,6 +15,7 @@ function App() {
   const [ value, setValue ] = useState("Upload data file if needed");
   const [ fileName, setFileName ] = useState("No file uploaded");
   const [ file, setFile ] = useState(null);
+
   const [ successMessage, setSuccessMessage ] = useState("");
   const [ selectedDate, setSelectedDate ] = useState("");
   const [ selectedArea, setSelectedArea ] = useState("Puttalam");
@@ -65,8 +66,10 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("location", selectedArea);
+    // formData.append("date", selectedDate);
 
     try {
+
       const uploadLink = "https://climateforcast.azurewebsites.net/upload";
       const response = await axios.post(uploadLink, formData);
       
@@ -173,6 +176,7 @@ function App() {
               <div>
                 <h3 className="section-sub-title">If you want predict precipitation of other areas in Sri Lanka other than Puttalam, upload a data file.</h3>
                 <button onClick={handleUploadButton} className='uploadafile-button'>Upload a file</button>
+
                 </div>
 
             )}

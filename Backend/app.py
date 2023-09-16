@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import pandas as pd
 import sqlite3
@@ -9,6 +10,7 @@ from datetime import datetime
 
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Database setup
 conn = sqlite3.connect('climate_data.db')
@@ -17,6 +19,9 @@ c = conn.cursor()
 # MLflow setup
 mlflow.set_tracking_uri("sqlite:///mlruns.db")
 
+@app.route("/")
+def home():
+    return {"message": "Hello!" }
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -61,11 +66,9 @@ def upload_file():
     return 'File uploaded, data stored and model trained successfully'
 
 
-
-
-
 @app.route('/predict', methods=['GET'])
 def predict():
+
     location = request.args.get('location')
     time = request.args.get('time')
 
