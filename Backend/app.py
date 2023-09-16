@@ -1,4 +1,5 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from werkzeug.utils import secure_filename
 import pandas as pd
 import sqlite3
@@ -9,6 +10,7 @@ from datetime import datetime
 
 
 app = Flask(__name__)
+CORS(app, resources={r"/*": {"origins": "http://localhost:3000"}})
 
 # Database setup
 conn = sqlite3.connect('climate_data.db')
@@ -17,6 +19,9 @@ c = conn.cursor()
 # MLflow setup
 mlflow.set_tracking_uri("sqlite:///mlruns.db")
 
+@app.route("/")
+def home():
+    return {"message": "Hello!" }
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -61,16 +66,16 @@ def upload_file():
     return 'File uploaded, data stored and model trained successfully'
 
 
-
-
-
 @app.route('/predict', methods=['GET'])
 def predict():
-    if 'location' not in request.form or 'time' not in request.form:
-        return 'Location or time not found in the request', 400
+    location = request.args.get("location")
+    time = request.args.get("time")
 
-    location = request.form['location']              # get the location 
-    time = datetime.strptime(request.form['time'], '%m/%d/%Y')  # get the time
+    time = datetime.strptime(time, '%m/%d/%Y')  
+
+    if not location or not time:
+        error_message = "Missing location or time parameter"
+        return jsonify({"error": error_message}), 400 
 
     # Load the latest model for this location from MLflow
     runs = mlflow.search_runs(filter_string=f"tags.mlflow.runName='{location}'")
