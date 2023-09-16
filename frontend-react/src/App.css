@@ -23,6 +23,14 @@ body {
   justify-content: center;
 }
 
+.section-para {
+  width: 100%;
+  display: flex;
+  /* padding: 10px; */
+  padding: 0px 50px;
+  justify-content: center;
+}
+
 .card-section {
   display: flex;
   align-items: stretch;
@@ -57,6 +65,7 @@ font-family: Lato;
 font-size: 30px;
 font-style: normal;
 font-weight: 700;
+margin-bottom: 0px;
 
 }
 
@@ -178,4 +187,26 @@ bottom: 20px;
   margin: 10px;
   padding: 5px;
   border-radius: 20px;
+}
+
+.section-para-text {
+  display: flex;
+  color: #0F3457;
+  font-size: 15px;
+}
+
+.predict-button {
+  height: 40px;
+  font-size: 20px;
+  width: 200px;
+}
+
+.uploadafile-button {
+  position: relative;
+  left: 130px;
+}
+
+.upload-button {
+  position: relative;
+  top: 20px;
 }

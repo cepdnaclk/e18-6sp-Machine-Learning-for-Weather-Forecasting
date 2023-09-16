@@ -2,9 +2,6 @@ import React from "react";
 import "./button.css";
 
 const Button = ({text, img = "", handleClickButton}) => {
-    const handleClick= () => {
-        alert("Button Clicked!");
-    };
 
     return (
         <button onClick={handleClickButton}>

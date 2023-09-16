@@ -1,0 +1,35 @@
+
+.success-box{
+    background-color:#a1d4f6;
+    width: 350px;
+    height: 100px;
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    z-index: 50;
+    border-radius: 15px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    height: 30px;
+    margin: 2px;
+}
+
+.success-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.success-message {
+    color: #0F3457;
+    text-align: center;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 40px;
+}

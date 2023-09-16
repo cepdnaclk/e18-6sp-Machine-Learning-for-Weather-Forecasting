@@ -1,0 +1,36 @@
+
+.alert-box{
+    background-color:#c9ac1b;
+    width: 350px;
+    min-height: 100px;
+    height: max-content;
+    position: fixed;
+    top: 40%;
+    left: 40%;
+    z-index: 50;
+    border-radius: 15px;
+}
+
+.close-icon {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    cursor: pointer;
+    height: 30px;
+    margin: 2px;
+}
+
+.alert-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.alert-message {
+    color: white;
+    text-align: center;
+    font-family: Lato;
+    font-size: 18px;
+    font-weight: 300;
+    margin-top: 40px;
+}
