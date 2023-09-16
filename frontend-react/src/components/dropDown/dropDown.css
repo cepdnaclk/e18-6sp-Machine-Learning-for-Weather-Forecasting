@@ -1,0 +1,39 @@
+
+.select-container {
+    position: relative;
+    width: 200px;
+  }
+  
+  select {
+
+    appearance: none; 
+    font-family: Lato;
+  background-color: #fff;
+  border: 1px solid #0F3457;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px #0A2239;
+  height: 50px;
+  width: 210px;
+  text-align: center;
+  font-size: 20px;
+  color: #0F3457;
+  }
+  
+  .select-container::after {
+    content: '\25BC'; 
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+  
+  select:hover {
+    border-color: #007bff; 
+  }
+  
+  select:focus {
+    box-shadow: 0 0 5px rgba(0, 123, 255, 0.7); /* Add a subtle box shadow on focus */
+    border-color: #0A2239; /* Change the border color on focus */
+  }
+  
