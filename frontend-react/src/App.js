@@ -14,10 +14,16 @@ function App() {
   const [ value, setValue ] = useState("Upload data file if needed");
   const [ fileName, setFileName ] = useState("No file uploaded");
   const [ file, setFile ] = useState(null);
+  const [ message, setMessage ] = useState("");
 
   const [ selectedDate, setSelectedDate ] = useState("");
   const [ selectedArea, setSelectedArea ] = useState("Puttalam");
   const [ isModalOpen, setIsModalOpen ] = useState(false);
+  const [isFileUploadVisible, setIsFileUploadVisible ] = useState(false);
+
+  const handleUploadButton = () => {
+    setIsFileUploadVisible(!isFileUploadVisible);
+  }
 
 
   const Areas = [
@@ -34,12 +40,12 @@ function App() {
   ];
 
   useEffect(() => {
-    fetch("https://precipitation-prediction.azurewebsites.net/")
-    .then((res) => res.json())
-    .then((data) => {
-      console.log(data);
-      setData(data.message);
-    });
+    fetch("https://precipitation-prediction.azurewebsites.net")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setData(data.message);
+      });
   }, []);
 
   const handlePredictClick = () => {
@@ -55,28 +61,39 @@ function App() {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("location", selectedArea);
+    // formData.append("date", selectedDate);
 
     try {
-      axios.post("https://precipitation-prediction.azurewebsites.net/upload", formData).then((res) =>{
-        console.log(res.data.message);
-        setValue(res.data.message);
-      });
-      alert("File uploaded sucessfully");
-    } catch(error){
+      // const uploadLink = "http://localhost:5000/upload";
+      const uploadLink = "https://precipitation-prediction.azurewebsites.net/upload";
+      const response = await axios.post(uploadLink, formData);
+
+      console.log(response.data.message);
+      setMessage(response.data.message);
+      alert(message);
+
+    } catch (error){
       console.error(error);
     }
   };
 
   const handleSubmitDateAndLocation = async (event) => {
     event.preventDefault();
-    const formData1 = new FormData();
-    formData1.append("time", selectedDate);
-    formData1.append("location", selectedArea);
+    const params = {
+      time: selectedDate,
+      location: selectedArea,
+    }
+    // const formData1 = new FormData();
+    // formData1.append("time", selectedDate);
+    // formData1.append("location", selectedArea);
 
     try {
-      axios.get("https://precipitation-prediction.azurewebsites.net/predict", formData1).then((res) =>{
-        console.log(res.data.message);
-        setValue(res.data.message);
+      const predictLink = "http://localhost:5000/predict";
+
+      axios.get(predictLink,{ params })
+      .then((response) => {
+        console.log(response.data);
+        setValue(response.data);
       });
       // alert("Data sent sucessfully");
     } catch(error){
@@ -125,14 +142,25 @@ function App() {
           <div className='card'>
           <NumberCircle number="3" />
             <h2 className='section-title-3'>Upload Data File</h2>
-            <h3 className="section-sub-title">If you want predict precipitation of other areas in Sri Lanka, upload a data file.</h3>
-            <form onSubmit={handleSubmitFileAndLocation}>
-              <div className='upload-area'>
-                <input type="file"  name="file"  className="upload-file" onChange={(e) => {setFile(e.target.files[0]); handleFileUpload(e) }}/>
+            {isFileUploadVisible ? (
+              <div>
+                <form onSubmit={handleSubmitFileAndLocation}>
+                  <label for="file-upload-area" class="custom-file-input">
+              <div className='upload-area' htmlFor="file-upload-area">
+                <input type="file"  id="file-upload-area" name="file"  className="upload-file" onChange={(e) => {setFile(e.target.files[0]); handleFileUpload(e) }}/>
                 <p className='upload-instruction'>Click to browse, or drag and drop a file</p>
                 <button type='submit'>Upload</button>
               </div>
+              </label>
             </form>
+            </div>
+            ) : (
+              <div>
+                <h3 className="section-sub-title">If you want predict precipitation of other areas in Sri Lanka other than Puttalam, upload a data file.</h3>
+                <button onClick={handleUploadButton}>Upload a file</button>
+                </div>
+
+            )}
           </div>
         </div>
       <div className='section'>
