@@ -40,7 +40,7 @@ function App() {
   ];
 
   useEffect(() => {
-    fetch("http://localhost:5000")
+    fetch("https://precipitation-prediction.azurewebsites.net")
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
@@ -64,8 +64,8 @@ function App() {
     // formData.append("date", selectedDate);
 
     try {
-      const uploadLink = "http://localhost:5000/upload";
-      // const uploadLink = "https://precipitation-prediction.azurewebsites.net/upload";
+      // const uploadLink = "http://localhost:5000/upload";
+      const uploadLink = "https://precipitation-prediction.azurewebsites.net/upload";
       const response = await axios.post(uploadLink, formData);
 
       console.log(response.data.message);
