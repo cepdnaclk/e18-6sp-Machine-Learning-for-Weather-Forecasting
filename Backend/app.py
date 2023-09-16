@@ -1,10 +1,11 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
 from werkzeug.utils import secure_filename
 import pandas as pd
 import sqlite3
 import mlflow
 import mlflow.sklearn
 from sklearn.ensemble import RandomForestRegressor
+from datetime import datetime
 
 
 app = Flask(__name__)
@@ -25,10 +26,12 @@ def upload_file():
     f = request.files['file']
     location = request.form['location']
 
-    f.save(secure_filename(f.filename))
+    filename = f"{location}.csv"
+
+    f.save(secure_filename(filename))
 
     # Load the data file into a pandas DataFrame
-    weather = pd.read_csv(f.filename)
+    weather = pd.read_csv(filename)
 
     # Create a target column
     weather['date'] = pd.to_datetime(weather['date'])  # Convert 'Date' column to DateTime format
@@ -59,12 +62,15 @@ def upload_file():
 
 
 
+
+
 @app.route('/predict', methods=['GET'])
 def predict():
     if 'location' not in request.form or 'time' not in request.form:
         return 'Location or time not found in the request', 400
 
     location = request.form['location']              # get the location 
+    time = datetime.strptime(request.form['time'], '%m/%d/%Y')  # get the time
 
     # Load the latest model for this location from MLflow
     runs = mlflow.search_runs(filter_string=f"tags.mlflow.runName='{location}'")
@@ -76,15 +82,32 @@ def predict():
     
     model = mlflow.sklearn.load_model(model_uri)
 
-    # return "model loaded success"
+    # Load the data for this location from the uploaded Excel file
+    data = pd.read_csv(f"{location}.csv")
 
-    # Load the data for this location from the SQLite database
-    data = pd.read_sql_query(f"SELECT * FROM {location}", conn)
+    # Convert 'date' column to DateTime format and find nearest date row for prediction
+    data['date'] = pd.to_datetime(data['date'], format='%m/%d/%Y')
 
+    data['delta'] = abs(data['date'] - time)
+    
+    nearest_date_row_df = data.loc[data['delta'].idxmin()].to_frame().T
+
+    selected_features = ['rsuscs', 'wap_850', 'tro3_500', 'sbl', 'puttalam', 'sfcWind', 'rtmt',
+        'va_500', 'tro3_850', 'rsds', 'rsutcs', 'rsdt', 'ta_850', 'rsus',
+        'hurs', 'rsdscs', 'clwvi', 'hfss', 'ua_500', 'va_850', 'ta_500', 'clt',
+        'zg_850', 'hfls', 'clivi', 'rlutcs', 'prc', 'zg_500', 'prw', 'evspsbl']
+
+    # Drop unnecessary columns and ensure all necessary columns are present
+    nearest_date_row_df.drop(['date','delta','puttalam'], axis=1, inplace=True)
+    for feature in selected_features:
+        if feature not in nearest_date_row_df.columns:
+            nearest_date_row_df[feature] = 0  # or some other default value 
+    
     # Make predictions using the model
-    predictions = model.predict(data.drop('precipitation', axis=1))
-
+    predictions = model.predict(nearest_date_row_df[selected_features])
+    
     return str(predictions)  # Convert numpy array to string
+
 
 if __name__ == '__main__':
     app.run(port=5000,debug=True)
