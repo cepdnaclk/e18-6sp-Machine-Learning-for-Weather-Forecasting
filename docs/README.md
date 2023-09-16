@@ -59,6 +59,35 @@ This is a sample image, to show how to add images to your page. To learn more op
 
 ![Solution](./images/6sp3.png)
 
+# Web-Based Precipitation Forecasting Solution Architecture
+
+Our web-based precipitation forecasting solution combines modern technologies to provide accurate and timely precipitation predictions. The architecture comprises a **React.js** frontend, a **Flask** backend, an **SQLite** database, **MLflow** for model registration and management, and **Jupyter notebooks** for model testing and development.
+
+**Frontend (React.js):**
+- Provides a user-friendly interface for users to input location and date.
+- Communicates with the backend to retrieve forecasted precipitation data.
+- Offers an intuitive visualization of the forecast.
+
+**Backend (Flask):**
+- Handles user requests and communicates with the SQLite database.
+- Integrates MLflow for model registration, version control, and deployment.
+- Utilizes ML models to generate precipitation forecasts.
+
+**Database (SQLite):**
+- Stores user preferences, historical data, and model parameters.
+- Enables quick retrieval of data required for forecasting.
+
+**MLflow:**
+- Manages ML model lifecycle, including versioning and tracking.
+- Provides a seamless transition from Jupyter notebooks to deployment in the Flask backend.
+
+**Jupyter Notebooks:**
+- Serves as a development and testing environment for ML models.
+- Allows for iterative model improvement and experimentation.
+
+This architecture ensures a scalable, robust, and efficient system for accurate precipitation forecasting with easy model management and development.
+
+
 ## Data Flow
 The prediction of Puttalam district will happen from the already uploaded dataset.
 If the user wants any other district's prediction and if he have the dataset with him he can upload the data set via our system and the model will get the prediction via our trained ML model. 
